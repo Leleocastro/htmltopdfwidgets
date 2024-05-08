@@ -521,9 +521,11 @@ class WidgetsHTMLDecoder {
             var base64Encoded = components[1];
             Uint8List listData = base64Decode(base64Encoded);
             return Image(
-              MemoryImage(listData),
+              MemoryImage(
+                listData,
+                dpi: dpi,
+              ),
               alignment: customStyles.imageAlignment,
-              dpi: dpi,
             );
           } else {
             return Text("");
