@@ -556,7 +556,7 @@ class WidgetsHTMLDecoder {
       if (src != null) {
         if (src.startsWith("data:image")) {
           // To handle a case if someone added a space after base64 string
-          List components = src.replaceAll(' ', '').split("base64, ");
+          List components = src.replaceAll(' ', '').split("base64,");
           if (components.isEmpty) {
             components = src.split("base64,");
           }
