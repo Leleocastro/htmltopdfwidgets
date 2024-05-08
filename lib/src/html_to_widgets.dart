@@ -502,11 +502,11 @@ class WidgetsHTMLDecoder {
   /// Function to parse an image element and download image as bytes  and return an Image widget
   Future<Widget> _parseImageElement(dom.Element element) async {
     final src = element.attributes["src"];
-    double dpi = 1.0;
+    double scale = 1.0;
     if (element.attributes.containsKey('style')) {
       final style = element.attributes['style'];
       final percentage = style?.replaceAll('width: ', '').replaceAll('height: ', '').replaceAll('%', '').replaceAll(';', '') ?? '1';
-      dpi = double.parse(percentage) / 100;
+      scale = double.parse(percentage) / 100;
     }
     try {
       if (src != null) {
@@ -520,12 +520,12 @@ class WidgetsHTMLDecoder {
           if (components.length > 1) {
             var base64Encoded = components[1];
             Uint8List listData = base64Decode(base64Encoded);
+
+            final image = MemoryImage(listData);
             return Image(
-              MemoryImage(
-                listData,
-                dpi: dpi,
-              ),
+              image,
               alignment: customStyles.imageAlignment,
+              width: image.width == null ? null : image.width * scale,
             );
           } else {
             return Text("");
