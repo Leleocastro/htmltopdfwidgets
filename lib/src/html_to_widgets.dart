@@ -503,9 +503,9 @@ class WidgetsHTMLDecoder {
   Future<Widget> _parseImageElement(dom.Element element) async {
     final src = element.attributes["src"];
     double dpi = 1.0;
-    if (element.contains('style')) {
+    if (element.attributes.containsKey('style')) {
       final style = element.attributes['style'];
-      final percentage = style.replaceAll('width: ', '').replaceAll('height: ', '').replaceAll('%', '');
+      final percentage = style?.replaceAll('width: ', '').replaceAll('height: ', '').replaceAll('%', '');
       dpi = double.parse(percentage) / 100;
     }
     try {
