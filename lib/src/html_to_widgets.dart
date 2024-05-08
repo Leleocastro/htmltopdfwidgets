@@ -505,7 +505,7 @@ class WidgetsHTMLDecoder {
     double dpi = 1.0;
     if (element.attributes.containsKey('style')) {
       final style = element.attributes['style'];
-      final percentage = style?.replaceAll('width: ', '').replaceAll('height: ', '').replaceAll('%', '');
+      final percentage = style?.replaceAll('width: ', '').replaceAll('height: ', '').replaceAll('%', '') ?? '1';
       dpi = double.parse(percentage) / 100;
     }
     try {
