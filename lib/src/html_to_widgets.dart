@@ -525,7 +525,7 @@ class WidgetsHTMLDecoder {
             return Image(
               image,
               alignment: customStyles.imageAlignment,
-              width: image.width == null ? null : image.width * scale,
+              width: image.width == null ? null : image.width! * scale,
             );
           } else {
             return Text("");
