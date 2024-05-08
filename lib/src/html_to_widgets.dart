@@ -80,16 +80,11 @@ class WidgetsHTMLDecoder {
           final attributes = _parserFormattingElementAttributes(domNode);
 
           textAlign = attributes.$1;
-          delta.add(TextSpan(
-              text: "${domNode.text.replaceAll(RegExp(r'\n+$'), '')} ",
-              style: attributes.$2));
+          delta.add(TextSpan(text: "${domNode.text.replaceAll(RegExp(r'\n+$'), '')} ", style: attributes.$2));
         } else if (HTMLTags.specialElements.contains(localName)) {
           if (delta.isNotEmpty) {
             final newlist = List<TextSpan>.from(delta);
-            result.add((SizedBox(
-                width: double.infinity,
-                child: RichText(
-                    textAlign: textAlign, text: TextSpan(children: newlist)))));
+            result.add((SizedBox(width: double.infinity, child: RichText(textAlign: textAlign, text: TextSpan(children: newlist)))));
 
             textAlign = null;
 
@@ -99,10 +94,7 @@ class WidgetsHTMLDecoder {
             checkbox = false;
 
             result.add(Row(children: [
-              SvgImage(
-                  svg: alreadyChecked
-                      ? AppAssets.checkedIcon
-                      : AppAssets.unCheckedIcon),
+              SvgImage(svg: alreadyChecked ? AppAssets.checkedIcon : AppAssets.unCheckedIcon),
               ...await _parseSpecialElements(
                 domNode,
                 type: BuiltInAttributeKey.bulletedList,
@@ -131,18 +123,14 @@ class WidgetsHTMLDecoder {
       } else if (domNode is dom.Text) {
         if (delta.isNotEmpty && domNode.text.trim().isNotEmpty) {
           final newlist = List<TextSpan>.from(delta);
-          result.add((SizedBox(
-              width: double.infinity,
-              child: RichText(
-                  textAlign: textAlign, text: TextSpan(children: newlist)))));
+          result.add((SizedBox(width: double.infinity, child: RichText(textAlign: textAlign, text: TextSpan(children: newlist)))));
 
           textAlign = null;
 
           delta.clear();
         }
 
-        result.add(Text(domNode.text,
-            style: TextStyle(font: font, fontFallback: fontFallback)));
+        result.add(Text(domNode.text, style: TextStyle(font: font, fontFallback: fontFallback)));
 
         /// Process text nodes and add them to delta
       } else {
@@ -151,10 +139,7 @@ class WidgetsHTMLDecoder {
     }
     if (delta.isNotEmpty) {
       final newlist = List<TextSpan>.from(delta);
-      result.add((SizedBox(
-          width: double.infinity,
-          child: RichText(
-              textAlign: textAlign, text: TextSpan(children: newlist)))));
+      result.add((SizedBox(width: double.infinity, child: RichText(textAlign: textAlign, text: TextSpan(children: newlist)))));
     }
 
     /// If there are text nodes in delta, wrap them in a Wrap widget and add to the result
@@ -235,8 +220,7 @@ class WidgetsHTMLDecoder {
   }
 
   //// Parses the attributes of a formatting element and returns a TextStyle.
-  (TextAlign?, TextStyle) _parserFormattingElementAttributes(
-      dom.Element element) {
+  (TextAlign?, TextStyle) _parserFormattingElementAttributes(dom.Element element) {
     final localName = element.localName;
     TextAlign? textAlign;
     TextStyle attributes = TextStyle(fontFallback: fontFallback, font: font);
@@ -244,16 +228,12 @@ class WidgetsHTMLDecoder {
     switch (localName) {
       /// Handle <bold> element
       case HTMLTags.bold || HTMLTags.strong:
-        attributes = attributes
-            .copyWith(fontWeight: FontWeight.bold)
-            .merge(customStyles.boldStyle);
+        attributes = attributes.copyWith(fontWeight: FontWeight.bold).merge(customStyles.boldStyle);
         break;
 
       /// Handle <em> <i> element
       case HTMLTags.italic || HTMLTags.em:
-        attributes = attributes
-            .copyWith(fontStyle: FontStyle.italic)
-            .merge(customStyles.italicStyle);
+        attributes = attributes.copyWith(fontStyle: FontStyle.italic).merge(customStyles.italicStyle);
 
         break;
 
@@ -287,17 +267,13 @@ class WidgetsHTMLDecoder {
           decoration.add(
             TextDecoration.underline,
           );
-          attributes = attributes
-              .copyWith(color: PdfColors.blue)
-              .merge(customStyles.linkStyle);
+          attributes = attributes.copyWith(color: PdfColors.blue).merge(customStyles.linkStyle);
         }
         break;
 
       /// Handle <code> element
       case HTMLTags.code:
-        attributes = attributes
-            .copyWith(background: const BoxDecoration(color: PdfColors.red))
-            .merge(customStyles.codeStyle);
+        attributes = attributes.copyWith(background: const BoxDecoration(color: PdfColors.red)).merge(customStyles.codeStyle);
         break;
       default:
         break;
@@ -313,10 +289,7 @@ class WidgetsHTMLDecoder {
     }
 
     ///will combine style get from the children
-    return (
-      textAlign,
-      attributes.copyWith(decoration: TextDecoration.combine(decoration))
-    );
+    return (textAlign, attributes.copyWith(decoration: TextDecoration.combine(decoration)));
   }
 
   ///convert table tag into the table pdf widget
@@ -331,9 +304,7 @@ class WidgetsHTMLDecoder {
     }
 
     return [
-      Table(
-          border: TableBorder.all(color: PdfColors.black),
-          children: tablenodes),
+      Table(border: TableBorder.all(color: PdfColors.black), children: tablenodes),
     ];
   }
 
@@ -372,9 +343,7 @@ class WidgetsHTMLDecoder {
     }
 
     ///returns the tale row
-    return TableRow(
-        decoration: BoxDecoration(border: Border.all(color: PdfColors.black)),
-        children: nodes);
+    return TableRow(decoration: BoxDecoration(border: Border.all(color: PdfColors.black)), children: nodes);
   }
 
   ///parse the nodes and handle theem accordingly
@@ -419,8 +388,7 @@ class WidgetsHTMLDecoder {
       );
     } else if (element is dom.Text) {
       /// Process text nodes and add them to delta
-      delta.add(Text(element.text,
-          style: TextStyle(font: font, fontFallback: fontFallback)));
+      delta.add(Text(element.text, style: TextStyle(font: font, fontFallback: fontFallback)));
     } else {
       assert(false, 'Unknown node type: $element');
     }
@@ -446,9 +414,7 @@ class WidgetsHTMLDecoder {
         textAlign = attributes.$1;
         delta.add(TextSpan(text: child.text, style: attributes.$2));
       } else {
-        delta.add(TextSpan(
-            text: child.text,
-            style: TextStyle(font: font, fontFallback: fontFallback)));
+        delta.add(TextSpan(text: child.text, style: TextStyle(font: font, fontFallback: fontFallback)));
       }
     }
 
@@ -458,11 +424,7 @@ class WidgetsHTMLDecoder {
         child: RichText(
             textAlign: textAlign,
             text: TextSpan(
-                children: delta,
-                style: TextStyle(
-                        fontSize: level.getHeadingSize,
-                        fontWeight: FontWeight.bold)
-                    .merge(level.getHeadingStyle(customStyles)))));
+                children: delta, style: TextStyle(fontSize: level.getHeadingSize, fontWeight: FontWeight.bold).merge(level.getHeadingStyle(customStyles)))));
   }
 
   /// Function to parse a block quote element and return a list of widgets
@@ -470,12 +432,10 @@ class WidgetsHTMLDecoder {
     final result = <Widget>[];
     if (element.children.isNotEmpty) {
       for (final child in element.children) {
-        result.addAll(
-            await _parseListElement(child, type: BuiltInAttributeKey.quote));
+        result.addAll(await _parseListElement(child, type: BuiltInAttributeKey.quote));
       }
     } else {
-      result.add(
-          buildQuotewidget(Text(element.text), customStyles: customStyles));
+      result.add(buildQuotewidget(Text(element.text), customStyles: customStyles));
     }
     return result;
   }
@@ -486,12 +446,10 @@ class WidgetsHTMLDecoder {
 
     if (element.children.isNotEmpty) {
       for (final child in element.children) {
-        result.addAll(await _parseListElement(child,
-            type: BuiltInAttributeKey.bulletedList));
+        result.addAll(await _parseListElement(child, type: BuiltInAttributeKey.bulletedList));
       }
     } else {
-      result.add(
-          buildBulletwidget(Text(element.text), customStyles: customStyles));
+      result.add(buildBulletwidget(Text(element.text), customStyles: customStyles));
     }
     return result;
   }
@@ -503,12 +461,10 @@ class WidgetsHTMLDecoder {
     if (element.children.isNotEmpty) {
       for (var i = 0; i < element.children.length; i++) {
         final child = element.children[i];
-        result.addAll(await _parseListElement(child,
-            type: BuiltInAttributeKey.numberList, index: i + 1));
+        result.addAll(await _parseListElement(child, type: BuiltInAttributeKey.numberList, index: i + 1));
       }
     } else {
-      result.add(buildNumberwdget(Text(element.text),
-          fontFallback: fontFallback, customStyles: customStyles, index: 1));
+      result.add(buildNumberwdget(Text(element.text), fontFallback: fontFallback, customStyles: customStyles, index: 1));
     }
     return result;
   }
@@ -527,13 +483,7 @@ class WidgetsHTMLDecoder {
 
       /// Build a numbered list widget
     } else if (type == BuiltInAttributeKey.numberList) {
-      return [
-        buildNumberwdget(delta,
-            index: index!,
-            customStyles: customStyles,
-            font: font,
-            fontFallback: fontFallback)
-      ];
+      return [buildNumberwdget(delta, index: index!, customStyles: customStyles, font: font, fontFallback: fontFallback)];
 
       /// Build a quote  widget
     } else if (type == BuiltInAttributeKey.quote) {
@@ -552,6 +502,12 @@ class WidgetsHTMLDecoder {
   /// Function to parse an image element and download image as bytes  and return an Image widget
   Future<Widget> _parseImageElement(dom.Element element) async {
     final src = element.attributes["src"];
+    double dpi = 1.0;
+    if (element.contains('style')) {
+      final style = element.attributes['style'];
+      final percentage = style.replaceAll('width: ', '').replaceAll('height: ', '').replaceAll('%', '');
+      dpi = double.parse(percentage) / 100;
+    }
     try {
       if (src != null) {
         if (src.startsWith("data:image")) {
@@ -564,19 +520,20 @@ class WidgetsHTMLDecoder {
           if (components.length > 1) {
             var base64Encoded = components[1];
             Uint8List listData = base64Decode(base64Encoded);
-            return Image(MemoryImage(listData),
-                alignment: customStyles.imageAlignment);
+            return Image(
+              MemoryImage(listData),
+              alignment: customStyles.imageAlignment,
+              dpi: dpi,
+            );
           } else {
             return Text("");
           }
         } else if (base64RegExp.hasMatch(src)) {
           Uint8List listData = base64Decode(src);
-          return Image(MemoryImage(listData),
-              alignment: customStyles.imageAlignment);
+          return Image(MemoryImage(listData), alignment: customStyles.imageAlignment);
         } else {
           final netImage = await _saveImage(src);
-          return Image(MemoryImage(netImage),
-              alignment: customStyles.imageAlignment);
+          return Image(MemoryImage(netImage), alignment: customStyles.imageAlignment);
         }
       } else {
         return Text("");
@@ -609,8 +566,7 @@ class WidgetsHTMLDecoder {
     for (final child in children) {
       /// Recursively parse child elements
       if (child is dom.Element) {
-        if (child.children.isNotEmpty &&
-            HTMLTags.formattingElements.contains(child.localName) == false) {
+        if (child.children.isNotEmpty && HTMLTags.formattingElements.contains(child.localName) == false) {
           childNodes.addAll(await _parseElement(child.children));
         } else {
           /// Handle special elements (e.g., headings, lists) within a paragraph
@@ -631,23 +587,18 @@ class WidgetsHTMLDecoder {
               final attributes = _parserFormattingElementAttributes(child);
               textAlign = attributes.$1;
 
-              delta.add(TextSpan(
-                  text: "${child.text.replaceAll(RegExp(r'\n+$'), ' ')} ",
-                  style: attributes.$2.merge(customStyles.paragraphStyle)));
+              delta.add(TextSpan(text: "${child.text.replaceAll(RegExp(r'\n+$'), ' ')} ", style: attributes.$2.merge(customStyles.paragraphStyle)));
             }
           }
         }
       } else {
-        final attributes =
-            _getDeltaAttributesFromHtmlAttributes(element.attributes);
+        final attributes = _getDeltaAttributesFromHtmlAttributes(element.attributes);
         textAlign = attributes.$1;
 
         /// Process text nodes and add them to delta variable
         delta.add(TextSpan(
             text: child.text?.replaceAll(RegExp(r'\n+$'), '') ?? "",
-            style: attributes.$2
-                .copyWith(font: font, fontFallback: fontFallback)
-                .merge(customStyles.paragraphStyle)));
+            style: attributes.$2.copyWith(font: font, fontFallback: fontFallback).merge(customStyles.paragraphStyle)));
       }
     }
 
@@ -679,8 +630,7 @@ class WidgetsHTMLDecoder {
   }
 
   /// Function to extract text styles from HTML attributes
-  (TextAlign?, TextStyle) _getDeltaAttributesFromHtmlAttributes(
-      LinkedHashMap<Object, String> htmlAttributes) {
+  (TextAlign?, TextStyle) _getDeltaAttributesFromHtmlAttributes(LinkedHashMap<Object, String> htmlAttributes) {
     TextStyle style = const TextStyle();
     TextAlign? textAlign;
 
@@ -692,15 +642,11 @@ class WidgetsHTMLDecoder {
     final fontWeightStr = cssMap["font-weight"];
     if (fontWeightStr != null) {
       if (fontWeightStr == "bold") {
-        style = style
-            .copyWith(fontWeight: FontWeight.bold)
-            .merge(customStyles.boldStyle);
+        style = style.copyWith(fontWeight: FontWeight.bold).merge(customStyles.boldStyle);
       } else {
         int? weight = int.tryParse(fontWeightStr);
         if (weight != null && weight > 500) {
-          style = style
-              .copyWith(fontWeight: FontWeight.bold)
-              .merge(customStyles.boldStyle);
+          style = style.copyWith(fontWeight: FontWeight.bold).merge(customStyles.boldStyle);
         }
       }
     }
@@ -708,24 +654,19 @@ class WidgetsHTMLDecoder {
     ///apply different text decorations like undrline line through
     final textDecorationStr = cssMap["text-decoration"];
     if (textDecorationStr != null) {
-      style = style.copyWith(
-          decoration:
-              _assignTextDecorations(style, textDecorationStr).decoration);
+      style = style.copyWith(decoration: _assignTextDecorations(style, textDecorationStr).decoration);
     }
 
     ///apply background color on text
     final backgroundColorStr = cssMap["background-color"];
-    final backgroundColor = backgroundColorStr == null
-        ? null
-        : ColorExtension.tryFromRgbaString(backgroundColorStr);
+    final backgroundColor = backgroundColorStr == null ? null : ColorExtension.tryFromRgbaString(backgroundColorStr);
     if (backgroundColor != null) {
       style = style.copyWith(color: backgroundColor);
     }
 
     ///apply background color on text
     final colorstr = cssMap["color"];
-    final color =
-        colorstr == null ? null : ColorExtension.tryFromRgbaString(colorstr);
+    final color = colorstr == null ? null : ColorExtension.tryFromRgbaString(colorstr);
     if (color != null) {
       style = style.copyWith(color: color);
     }
@@ -733,9 +674,7 @@ class WidgetsHTMLDecoder {
     ///apply italic tag
 
     if (cssMap["font-style"] == "italic") {
-      style = style
-          .copyWith(fontStyle: FontStyle.italic)
-          .merge(customStyles.italicStyle);
+      style = style.copyWith(fontStyle: FontStyle.italic).merge(customStyles.italicStyle);
     }
     final align = cssMap["text-align"];
     if (align != null) {
@@ -763,8 +702,7 @@ class WidgetsHTMLDecoder {
   }
 
   ///this function apply thee text decorations from html inline style css
-  static TextStyle _assignTextDecorations(
-      TextStyle style, String decorationStr) {
+  static TextStyle _assignTextDecorations(TextStyle style, String decorationStr) {
     final decorations = decorationStr.split(" ");
     final textdecorations = <TextDecoration>[];
     for (final d in decorations) {
